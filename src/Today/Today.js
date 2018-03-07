@@ -11,7 +11,7 @@ class Today extends Component {
         };
     }
     componentWillMount() {
-        axios.get('https://min-api.cryptocompare.com/data/top/totalvol?limit=50&tsym=USD')
+        axios.get('https://min-api.cryptocompare.com/data/top/totalvol?limit=20&tsym=USD')
             .then(res => {
                 const coinlist = res.data.Data;
                 console.log(coinlist);
@@ -24,26 +24,27 @@ class Today extends Component {
     }
     render() {
         return(
-            
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Symbol</th>
-                        <th>Total Value(USD)</th>
-                        <th>Total Supply(USD)</th>
-                    </tr>
-                </thead>
-                
-                <tbody>
-                    {Object.keys(this.state.coinlist).map((key) => (
-                    <tr class="columns">
-                        <td>{this.state.coinlist[key].CoinInfo.Name}</td>
-                        <td><NumberFormat value={this.state.coinlist[key].ConversionInfo.TotalVolume24H} displayType={'text'} decimalPrecision={7} thousandSeparator={true} prefix={'$'} /></td>
-                        <td><NumberFormat value={this.state.coinlist[key].ConversionInfo.Supply} displayType={'text'} thousandSeparator={true} prefix={'$'} />.00</td>
-                    </tr>   
-                    ))}
-                </tbody>
-            </table>
+            <div>
+                <table className="table is-narrow is-bordered is-striped">
+                    <thead>
+                        <tr>
+                            <th>Symbol</th>
+                            <th>Full Name</th>
+                            <th>Total Value</th>
+                        </tr>
+                    </thead>
+                    
+                    <tbody>
+                        {Object.keys(this.state.coinlist).map((key) => (
+                        <tr>
+                            <td>{this.state.coinlist[key].CoinInfo.Name}</td>
+                            <td>{this.state.coinlist[key].CoinInfo.FullName}</td>
+                            <td><NumberFormat value={this.state.coinlist[key].ConversionInfo.TotalVolume24H} displayType={'text'} decimalScale={2} thousandSeparator={true} prefix={'$'} /></td>
+                        </tr>   
+                        ))}
+                    </tbody>
+                </table>
+            </div>
         );
     }
 }

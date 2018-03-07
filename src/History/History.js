@@ -125,9 +125,9 @@ class History extends Component {
     render() {
         return (
             
-            <div className="container">
+            <div>
             
-                <table className='table table-hover'>
+                <table class='table is-narrow is-stripe'>
                     <thead>
                         <tr>
                             <th>1-Day</th>
@@ -144,7 +144,7 @@ class History extends Component {
                     </tbody>
                 </table>
                 
-                <table className='table table-hover'>
+                <table class='table is-narrow is-stripe'>
                     <thead>
                         <tr>
                             <th>7-Day</th>
@@ -161,7 +161,7 @@ class History extends Component {
                     </tbody>
                 </table>
                 
-                <table className='table table-hover'>
+                <table class='table is-narrow is-stripe'>
                     <thead>
                         <tr>
                             <th>30-Day</th>
@@ -178,7 +178,7 @@ class History extends Component {
                     </tbody>
                 </table>
                 
-                <table className='table table-hover'>
+                <table class='table is-narrow is-stripe'>
                     <thead>
                         <tr>
                             <th>1-Year</th>
@@ -195,7 +195,7 @@ class History extends Component {
                     </tbody>
                 </table>
                 
-                <table className='table table-hover'>
+                <table class='table is-narrow is-stripe'>
                     <thead>
                         <tr>
                             <th>5-Year</th>

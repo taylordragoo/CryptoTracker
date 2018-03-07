@@ -24,7 +24,7 @@ class Home extends Component {
     
     render() {
         return(
-            <table class='table table-hover'>
+            <table class='table is-striped'>
                 <thead>
                     <tr>
                         <th>News</th>

@@ -1,9 +1,9 @@
 body {
   background: #f1f1f1;
-  /*padding:50px;*/
+
 }
 
-div#crypto-container {
+div #container {
   background:white;
   width: 70%;
   margin: 0 auto 4px auto;
@@ -12,7 +12,7 @@ div#crypto-container {
 }
 
 span.left {
-  font-weight: bold;
+  float:left;
 }
 
 span.right {
