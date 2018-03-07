@@ -1,22 +1,21 @@
 import React, { Component } from "react";
 import './today.css'
 import axios from 'axios'
+var NumberFormat = require('react-number-format');
 
 class Today extends Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
         this.state = {
-            btcprice: '',
-            ltcprice: '',
-            ethprice: ''
+            coinlist: []
         };
     }
     componentWillMount() {
-        axios.get('https://min-api.cryptocompare.com/data/pricemulti?fsyms=BTC,ETH,LTC&tsyms=USD')
-            .then(response => {
-                this.setState({ btcprice: response.data.BTC.USD });
-                this.setState({ ethprice: response.data.ETH.USD });
-                this.setState({ ltcprice: response.data.LTC.USD });
+        axios.get('https://min-api.cryptocompare.com/data/top/totalvol?limit=50&tsym=USD')
+            .then(res => {
+                const coinlist = res.data.Data;
+                console.log(coinlist);
+                this.setState({coinlist: coinlist});
             })
             // Error catching
             .catch(error => {
@@ -25,27 +24,26 @@ class Today extends Component {
     }
     render() {
         return(
-            <div className="today--section container">
-                <h2>Today Current Price's</h2>
+            
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Total Value(USD)</th>
+                        <th>Total Supply(USD)</th>
+                    </tr>
+                </thead>
                 
-                <div className="columns today--section__box">
-                    <div className="column btc--section">
-                        <h5>${this.state.btcprice}</h5>
-                        <p>1 BTC</p>
-                    </div>
-                </div>
-                
-                <div className="column eth--section">
-                    <h5>${this.state.ethprice}</h5>
-                    <p>1 ETH</p>
-                </div>
-                
-                <div className="column ltc--section">
-                    <h5>${this.state.ltcprice}</h5>
-                    <p>1 LTC</p>
-                </div>
-                
-            </div>
+                <tbody>
+                    {Object.keys(this.state.coinlist).map((key) => (
+                    <tr class="columns">
+                        <td>{this.state.coinlist[key].CoinInfo.Name}</td>
+                        <td><NumberFormat value={this.state.coinlist[key].ConversionInfo.TotalVolume24H} displayType={'text'} decimalPrecision={7} thousandSeparator={true} prefix={'$'} /></td>
+                        <td><NumberFormat value={this.state.coinlist[key].ConversionInfo.Supply} displayType={'text'} thousandSeparator={true} prefix={'$'} />.00</td>
+                    </tr>   
+                    ))}
+                </tbody>
+            </table>
         );
     }
 }

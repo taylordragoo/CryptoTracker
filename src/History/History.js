@@ -7,7 +7,6 @@ class History extends Component {
     constructor() {
         super();
         this.state = {
-            todayprice: {},
             yesterdayprice: {},
             weekprice: {},
             monthprice: {},
@@ -18,38 +17,22 @@ class History extends Component {
         this.getETHPrices = this.getETHPrices.bind(this);
         this.getLTCPrices = this.getLTCPrices.bind(this);
     }
-    // Get ETH Prices for specific date range
+
     getETHPrices(date) {
         return axios.get('https://min-api.cryptocompare.com/data/pricehistorical?fsym=ETH&tsyms=USD&ts=' + date);
     }
-    // get BTC Prices for date range
+
     getBTCPrices(date) {
         return axios.get('https://min-api.cryptocompare.com/data/pricehistorical?fsym=BTC&tsyms=USD&ts=' + date);
     }
-    // get LTC Prices for date range
+    
     getLTCPrices(date) {
         return axios.get('https://min-api.cryptocompare.com/data/pricehistorical?fsym=LTC&tsyms=USD&ts=' + date);
     }
-    
-    getTodayPrice() {
-        // Today Timestamp
-        let t = moment();
+
+    yesterdayPrice() {
         
-        axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
-            .then(axios.spread((eth, btc, ltc) => {
-                let f = {
-                    date: moment(t).format("MMMM Do YYYY"),
-                    eth: eth.data.ETH.USD,
-                    btc: btc.data.BTC.USD,
-                    ltc: ltc.data.LTC.USD
-                }
-                
-                this.setState({ todayprice: f});
-            }));
-    }
-    getYesterdayPrice() {
-        
-        let t = moment().subtract(7, 'days');
+        let t = moment().subtract(1, 'days').unix();
         
         axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
             .then(axios.spread((eth, btc, ltc) => {
@@ -61,50 +44,174 @@ class History extends Component {
                 }
                 
                 this.setState({ yesterdayprice: f});
+            }));       
+    }
+    
+    weekPrice() {
+        
+        let t = moment().subtract(7, 'days').unix();
+        
+        axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
+            .then(axios.spread((eth, btc, ltc) => {
+                let f = {
+                    date: moment(t).format("MMMM Do YYYY"),
+                    eth: eth.data.ETH.USD,
+                    btc: btc.data.BTC.USD,
+                    ltc: ltc.data.LTC.USD
+                }
                 
-            }));        
+                this.setState({ weekprice: f});
+            }));       
+    }
+    
+    monthPrice() {
+        
+        let t = moment().subtract(30, 'days').unix();
+        
+        axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
+            .then(axios.spread((eth, btc, ltc) => {
+                let f = {
+                    date: moment(t).format("MMMM Do YYYY"),
+                    eth: eth.data.ETH.USD,
+                    btc: btc.data.BTC.USD,
+                    ltc: ltc.data.LTC.USD
+                }
+                
+                this.setState({ monthprice: f});
+            }));       
+    }
+    
+    yearPrice() {
+        
+        let t = moment().subtract(365, 'days').unix();
+        
+        axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
+            .then(axios.spread((eth, btc, ltc) => {
+                let f = {
+                    date: moment(t).format("MMMM Do YYYY"),
+                    eth: eth.data.ETH.USD,
+                    btc: btc.data.BTC.USD,
+                    ltc: ltc.data.LTC.USD
+                }
+                
+                this.setState({ yearprice: f});
+            }));       
+    }
+    
+    fiveYearPrice() {
+        
+        let t = moment().subtract(1825, 'days').unix();
+        
+        axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
+            .then(axios.spread((eth, btc, ltc) => {
+                let f = {
+                    date: moment(t).format("MMMM Do YYYY"),
+                    eth: eth.data.ETH.USD,
+                    btc: btc.data.BTC.USD,
+                    ltc: ltc.data.LTC.USD
+                }
+                
+                this.setState({ fiveyearprice: f});
+            }));       
     }
     
     componentWillMount(){
-        this.getTodayPrice();
-        this.getYesterdayPrice();
+        this.yesterdayPrice();
+        this.weekPrice();
+        this.monthPrice();
+        this.yearPrice();
+        this.fiveYearPrice();
     }
     render() {
         return (
-            <div className="history--section container">
-                <h2>History</h2>
-                <div className="history--section__box">
-                    <div className="history--section__box__inner">
-                        <h4>{this.state.todayprice.date}</h4>
-                        <div className="columns">
-                            <div className="column">
-                                <p>1 BTC = ${this.state.todayprice.btc}</p>
-                            </div>
-                            <div className="column">
-                                <p>1 ETH = ${this.state.todayprice.eth}</p>
-                            </div>
-                            <div className="column">
-                                <p>1 LTC = ${this.state.todayprice.ltc}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div className="history--section__box__inner">
-                        <h4>{this.state.yesterdayprice.date}</h4>
-                        <div className="columns">
-                            <div className="column">
-                                <p>1 BTC = ${this.state.yesterdayprice.btc}</p>
-                            </div>
-                            <div className="column">
-                                <p>1 ETH = ${this.state.yesterdayprice.eth}</p>
-                            </div>
-                            <div className="column">
-                                <p>1 LTC = ${this.state.yesterdayprice.ltc}</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                </div>
+            
+            <div className="container">
+            
+                <table className='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th>1-Day</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BTC = ${this.state.yesterdayprice.btc}</td>
+                            <td>ETH = ${this.state.yesterdayprice.eth}</td>
+                            <td>LTC = ${this.state.yesterdayprice.ltc}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <table className='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th>7-Day</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BTC = ${this.state.weekprice.btc}</td>
+                            <td>ETH = ${this.state.weekprice.eth}</td>
+                            <td>LTC = ${this.state.weekprice.ltc}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <table className='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th>30-Day</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BTC = ${this.state.monthprice.btc}</td>
+                            <td>ETH = ${this.state.monthprice.eth}</td>
+                            <td>LTC = ${this.state.monthprice.ltc}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <table className='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th>1-Year</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BTC = ${this.state.yearprice.btc}</td>
+                            <td>ETH = ${this.state.yearprice.eth}</td>
+                            <td>LTC = ${this.state.yearprice.ltc}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <table className='table table-hover'>
+                    <thead>
+                        <tr>
+                            <th>5-Year</th>
+                            <th>&nbsp;</th>
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>BTC = ${this.state.fiveyearprice.btc}</td>
+                            <td>ETH = ${this.state.fiveyearprice.eth}</td>
+                            <td>LTC = ${this.state.fiveyearprice.ltc}</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
             </div>
         );
     }
