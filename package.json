@@ -1,6 +1,5 @@
 {
   "name": "CryptoTracker",
-  "version": "1.0",
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
@@ -9,7 +8,7 @@
     "react-dom": "^16.2.0",
     "react-number-format": "^3.2.0",
     "react-router-dom": "^4.2.2",
-    "react-scripts": "1.1.1"
+    "react-scripts": "^1.1.1"
   },
   "scripts": {
     "start": "react-scripts start",
