@@ -10,11 +10,10 @@ class Home extends Component {
         };
     }
     
-    componentWillMount() {
+    componentDidMount() {
         axios.get('https://min-api.cryptocompare.com/data/news/?lang=EN')
             .then(res => {
                 const todaynews = res.data;
-                console.log(todaynews);
                 this.setState({todaynews});
             })
             .catch(error => {
@@ -24,7 +23,7 @@ class Home extends Component {
     
     render() {
         return(
-            <table class='table is-striped'>
+            <table key={this.state.todaynews.title} className='table is-striped'>
                 <thead>
                     <tr>
                         <th>News</th>
@@ -33,14 +32,14 @@ class Home extends Component {
                 
                 <tbody>
                     {Object.keys(this.state.todaynews).map((key) => (
-                        <tr>
+                        <tr key={key}>
                             <td>
                                 <a href={this.state.todaynews[key].url}>
                                     <h3>{this.state.todaynews[key].title}</h3>
                                 </a>
                                 <p>{this.state.todaynews[key].body.slice(0, 150)}...</p>
-                                <span class="left"><p><a href={this.state.todaynews[key].url}>Continue reading...</a></p></span>
-                                <span class="right">{this.state.todaynews[key].date}</span>
+                                <span className="left"><p><a href={this.state.todaynews[key].url} target="_blank">Continue reading...</a></p></span>
+                                <span className="right">{this.state.todaynews[key].date}</span>
                             </td>
                         </tr>
                     ))}

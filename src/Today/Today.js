@@ -14,7 +14,6 @@ class Today extends Component {
         axios.get('https://min-api.cryptocompare.com/data/top/totalvol?limit=20&tsym=USD')
             .then(res => {
                 const coinlist = res.data.Data;
-                console.log(coinlist);
                 this.setState({coinlist: coinlist});
             })
             // Error catching
@@ -36,7 +35,7 @@ class Today extends Component {
                     
                     <tbody>
                         {Object.keys(this.state.coinlist).map((key) => (
-                        <tr>
+                        <tr key={key}>
                             <td>{this.state.coinlist[key].CoinInfo.Name}</td>
                             <td>{this.state.coinlist[key].CoinInfo.FullName}</td>
                             <td><NumberFormat value={this.state.coinlist[key].ConversionInfo.TotalVolume24H} displayType={'text'} decimalScale={2} thousandSeparator={true} prefix={'$'} /></td>

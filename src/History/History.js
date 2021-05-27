@@ -9,9 +9,7 @@ class History extends Component {
         this.state = {
             yesterdayprice: {},
             weekprice: {},
-            monthprice: {},
-            yearprice: {},
-            fiveyearprice: {}
+            monthprice: {}
         }
         this.getBTCPrices = this.getBTCPrices.bind(this);
         this.getETHPrices = this.getETHPrices.bind(this);
@@ -28,6 +26,7 @@ class History extends Component {
     
     getLTCPrices(date) {
         return axios.get('https://min-api.cryptocompare.com/data/pricehistorical?fsym=LTC&tsyms=USD&ts=' + date);
+        
     }
 
     yesterdayPrice() {
@@ -81,46 +80,10 @@ class History extends Component {
             }));       
     }
     
-    yearPrice() {
-        
-        let t = moment().subtract(365, 'days').unix();
-        
-        axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
-            .then(axios.spread((eth, btc, ltc) => {
-                let f = {
-                    date: moment(t).format("MMMM Do YYYY"),
-                    eth: eth.data.ETH.USD,
-                    btc: btc.data.BTC.USD,
-                    ltc: ltc.data.LTC.USD
-                }
-                
-                this.setState({ yearprice: f});
-            }));       
-    }
-    
-    fiveYearPrice() {
-        
-        let t = moment().subtract(1825, 'days').unix();
-        
-        axios.all([this.getETHPrices(t), this.getBTCPrices(t), this.getLTCPrices(t)])
-            .then(axios.spread((eth, btc, ltc) => {
-                let f = {
-                    date: moment(t).format("MMMM Do YYYY"),
-                    eth: eth.data.ETH.USD,
-                    btc: btc.data.BTC.USD,
-                    ltc: ltc.data.LTC.USD
-                }
-                
-                this.setState({ fiveyearprice: f});
-            }));       
-    }
-    
-    componentWillMount(){
+    componentDidMount(){
         this.yesterdayPrice();
         this.weekPrice();
         this.monthPrice();
-        this.yearPrice();
-        this.fiveYearPrice();
     }
     render() {
         return (
@@ -177,41 +140,6 @@ class History extends Component {
                         </tr>
                     </tbody>
                 </table>
-                
-                <table className='table is-narrow is-stripe'>
-                    <thead>
-                        <tr>
-                            <th>1-Year</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>BTC = ${this.state.yearprice.btc}</td>
-                            <td>ETH = ${this.state.yearprice.eth}</td>
-                            <td>LTC = ${this.state.yearprice.ltc}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
-                <table className='table is-narrow is-stripe'>
-                    <thead>
-                        <tr>
-                            <th>5-Year</th>
-                            <th>&nbsp;</th>
-                            <th>&nbsp;</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>BTC = ${this.state.fiveyearprice.btc}</td>
-                            <td>ETH = ${this.state.fiveyearprice.eth}</td>
-                            <td>LTC = ${this.state.fiveyearprice.ltc}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                
             </div>
         );
     }

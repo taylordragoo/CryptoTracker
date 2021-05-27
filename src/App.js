@@ -19,12 +19,12 @@ class App extends Component {
           <ul className="header">
             <li><NavLink exact to="/">Home</NavLink></li>
             <li><NavLink to="/today">Coins</NavLink></li>
-            {/* <li><NavLink to="/history">History</NavLink></li> */}
+            <li><NavLink to="/history">History</NavLink></li>
           </ul>
           <div className="content">
             <Route exact path="/" component={Home}/>
             <Route path="/today" component={Today}/>
-            {/* <Route path="/history" component={History}/> */}
+            <Route path="/history" component={History}/>
           </div>
         </div>
       </HashRouter>
